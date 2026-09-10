@@ -1,9 +1,9 @@
 # Nebula Arcade — Web Game Portal (ACM SIGGRAPH SRMIST Induction Task)
 
-**Name:** _add your name here_
-**Registration Number:** _add your reg. no. here_
+**Name:** _Rachit Thakuriya_
+**Registration Number:** _RA2511003011281_
 **Tech stack:** HTML5, CSS3, vanilla JavaScript (ES6), Three.js r128 (CDN)
-**Live demo:** _add your Vercel/Netlify/GitHub Pages link here after deploying_
+**Live demo:** _https://web-game-portal-siggraph-task-nu.vercel.app/_
 
 ## What this is
 
@@ -42,24 +42,6 @@ Everything is separated by concern: markup in `index.html`, styling in
 `css/style.css`, and behavior split across small, single-purpose JS
 modules — no inline `style=`/`onclick=` attributes anywhere.
 
-## How to run it locally
-
-No build step is required. Either:
-
-- Open `index.html` directly in a browser, or
-- Serve it with any static server, e.g. `npx serve .` or the VS Code
-  "Live Server" extension, then visit the printed local URL.
-
-## How to deploy it (bonus: live deployment)
-
-Any static host works since this is a plain HTML/CSS/JS site:
-
-- **Vercel:** `npx vercel` from this folder, or drag-and-drop the
-  folder into the Vercel dashboard.
-- **Netlify:** drag-and-drop the folder into the Netlify dashboard, or
-  `npx netlify deploy`.
-- **GitHub Pages:** push this repo, then enable Pages on the `main`
-  branch in the repo settings (root folder).
 
 ## Design notes / how the mandatory requirements are met
 
@@ -102,9 +84,3 @@ Any static host works since this is a plain HTML/CSS/JS site:
   (`js/particles.js`) behind the whole site, plus a parallax starfield
   and low-poly, flat-shaded asteroids/ship inside the 3D scene itself.
 
-## Honesty note
-
-This was built from scratch for this task; no third-party template or
-copied source was used. Three.js itself is loaded from a public CDN,
-as is standard practice — the game logic, scene setup, UI, and styling
-are all original.

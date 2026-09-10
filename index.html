@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>Nebula Arcade | Web Game Portal</title>
+<meta name="description" content="A web game portal featuring a Three.js 3D game and an HTML Canvas game — pick one and play." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- External stylesheet (Separation of Concerns) -->
+<link rel="stylesheet" href="css/style.css" />
+
+<!-- favicon (inline svg, no external asset needed) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ff5b2e'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+<div id="bg-canvas-wrap" aria-hidden="true">
+  <canvas id="bg-canvas"></canvas>
+</div>
+
+<header class="site-header">
+  <div class="brand">
+    <span class="brand-mark">◆</span>
+    <span class="brand-text">NEBULA<strong>ARCADE</strong></span>
+  </div>
+  <nav class="header-nav">
+    <a href="#hub" id="nav-hub" class="nav-link active">Game Hub</a>
+    <a href="#leaderboard" id="nav-leaderboard" class="nav-link">Leaderboard</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ GAME HUB (Mandatory Landing / Library) ============ -->
+  <section id="hub" class="view view--active">
+    <div class="hub-intro">
+      <h1>Choose your game</h1>
+      <p>A small library of browser games. Pick one to play instantly — no downloads, no installs.</p>
+    </div>
+
+    <div class="game-grid">
+
+      <!-- Game Card 1: Stellar Drift (Three.js) -->
+      <article class="game-card" data-game="stellar-drift" tabindex="0" role="button" aria-label="Play Stellar Drift">
+        <div class="game-thumb thumb--stellar" aria-hidden="true">
+          <svg viewBox="0 0 200 140" class="thumb-svg">
+            <defs>
+              <radialGradient id="g1" cx="50%" cy="35%" r="75%">
+                <stop offset="0%" stop-color="#3a2a6d"/>
+                <stop offset="100%" stop-color="#0d0b1e"/>
+              </radialGradient>
+            </defs>
+            <rect width="200" height="140" fill="url(#g1)"/>
+            <circle cx="150" cy="30" r="4" fill="#ff5b2e"/>
+            <circle cx="40" cy="20" r="2" fill="#8be9fd"/>
+            <circle cx="170" cy="80" r="2" fill="#8be9fd"/>
+            <circle cx="70" cy="100" r="10" fill="#5b4bff" opacity="0.7"/>
+            <circle cx="120" cy="60" r="6" fill="#ff5b2e" opacity="0.8"/>
+            <polygon points="100,110 90,125 110,125" fill="#f4f1ff"/>
+          </svg>
+          <span class="thumb-tag">3D · Three.js</span>
+        </div>
+        <div class="game-info">
+          <h2>Stellar Drift</h2>
+          <p>Pilot your ship through a drifting asteroid field. Survive as long as you can — the field only gets faster.</p>
+          <span class="play-cta">Play now →</span>
+        </div>
+      </article>
+
+      <!-- Game Card 2: Void Runner (HTML Canvas 2D) -->
+      <article class="game-card" data-game="void-runner" tabindex="0" role="button" aria-label="Play Void Runner">
+        <div class="game-thumb thumb--runner" aria-hidden="true">
+          <svg viewBox="0 0 200 140" class="thumb-svg">
+            <defs>
+              <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1a1430"/>
+                <stop offset="100%" stop-color="#05040c"/>
+              </linearGradient>
+            </defs>
+            <rect width="200" height="140" fill="url(#g2)"/>
+            <line x1="66" y1="0" x2="66" y2="140" stroke="#2e2a4d" stroke-width="2"/>
+            <line x1="133" y1="0" x2="133" y2="140" stroke="#2e2a4d" stroke-width="2"/>
+            <rect x="20" y="18" width="26" height="14" rx="3" fill="#ff5b2e"/>
+            <rect x="150" y="55" width="26" height="14" rx="3" fill="#8be9fd" opacity="0.85"/>
+            <rect x="85" y="30" width="26" height="14" rx="3" fill="#ff5b2e" opacity="0.85"/>
+            <circle cx="99" cy="112" r="10" fill="#5b4bff"/>
+            <circle cx="99" cy="112" r="15" fill="#5b4bff" opacity="0.25"/>
+          </svg>
+          <span class="thumb-tag">2D · Canvas</span>
+        </div>
+        <div class="game-info">
+          <h2>Void Runner</h2>
+          <p>Three-lane dodge game. Weave between falling blocks and grab energy orbs — one hit ends the run.</p>
+          <span class="play-cta">Play now →</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ GAME VIEW (Three.js mounts here) ============ -->
+  <section id="game-view" class="view">
+    <div class="game-toolbar">
+      <button id="back-to-hub" class="btn btn--ghost">← Back to Hub</button>
+      <div class="hud">
+        <span class="hud-label">Score</span>
+        <span id="hud-score">0</span>
+      </div>
+      <div class="hud">
+        <span class="hud-label">Best</span>
+        <span id="hud-best">0</span>
+      </div>
+    </div>
+
+    <div id="game-stage">
+      <canvas id="game-canvas"></canvas>
+
+      <div id="game-overlay" class="game-overlay">
+        <div class="overlay-panel">
+          <h2 id="overlay-title">Stellar Drift</h2>
+          <p id="overlay-text">Dodge the asteroids. Use <kbd>←</kbd><kbd>→</kbd> / <kbd>A</kbd><kbd>D</kbd> (or drag on mobile) to steer. Survive.</p>
+
+          <div id="overlay-score-entry" class="score-entry hidden">
+            <label for="player-name">Save your score</label>
+            <div class="score-entry-row">
+              <input id="player-name" maxlength="12" placeholder="Your name" autocomplete="off" />
+              <button id="save-score-btn" class="btn btn--primary">Save</button>
+            </div>
+          </div>
+
+          <button id="overlay-start-btn" class="btn btn--primary">Start Game</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="mobile-hint">Tip: on touch devices, drag left/right anywhere on the game area to steer.</p>
+  </section>
+
+  <!-- ============ LEADERBOARD ============ -->
+  <section id="leaderboard" class="view">
+    <div class="hub-intro">
+      <h1>Leaderboard</h1>
+      <p>Top scores, stored locally in your browser — one board per game.</p>
+    </div>
+    <div class="leaderboard-tabs" role="tablist">
+      <button class="lb-tab active" data-lb-game="stellar-drift" role="tab" aria-selected="true">Stellar Drift</button>
+      <button class="lb-tab" data-lb-game="void-runner" role="tab" aria-selected="false">Void Runner</button>
+    </div>
+    <div class="leaderboard-panel">
+      <ol id="leaderboard-list" class="leaderboard-list">
+        <li class="leaderboard-empty">No scores yet — go play a round!</li>
+      </ol>
+      <button id="clear-leaderboard-btn" class="btn btn--ghost btn--small">Clear this leaderboard</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Built for the ACM SIGGRAPH SRMIST · Web Development Induction Task 2026–27</p>
+</footer>
+
+<!-- Three.js (loaded from CDN, r128) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- Modular application scripts (Separation of Concerns) -->
+<script src="js/particles.js"></script>
+<script src="js/leaderboard.js"></script>
+<script src="js/game.js"></script>
+<script src="js/void-runner.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
